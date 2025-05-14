@@ -1,0 +1,56 @@
+.image {
+    width: 100%;
+    text-align: center;
+    margin: 3em 0;
+}
+
+.image img {
+    max-width: 100%;
+}
+
+.image figcaption {
+    margin-top: 0.5em;
+}
+
+.chapter {
+    break-before: right;
+}
+
+.page-break {
+    break-before: page;
+}
+
+.dinkus {
+    margin-top: 3em 0;
+}
+
+.admonition {
+    border: 1px solid black;
+    margin: 1em;
+    padding: 1em;
+}
+
+.columns {
+    display: flex;
+}
+.columns .column {
+    flex: 1;
+}
+
+.table {
+    width: 100%;
+}
+
+.table th {
+    border-bottom: 1px solid black;
+    padding: 0.5em;
+    font-weight: bold;
+}
+
+.table td {
+    padding: 0.5em;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f0f0f0;
+}

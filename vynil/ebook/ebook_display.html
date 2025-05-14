@@ -1,0 +1,76 @@
+%interpolate <% %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>EPUB Viewer</title>
+        <script src="<% jszip_url %>"></script>
+        <script src="<% epubjs_url %>"></script>
+        <style>
+            #viewer {
+                height: 100vh;
+                width: 100%;
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="viewer"></div>
+        <div id="controls">
+            <button onclick="rendition.prev()">← Prev</button>
+            <span id="page-info">Loading...</span>
+            <button onclick="rendition.next()">Next →</button>
+        </div>
+        <div id="toc"></div>
+        <script>
+            let rendition;
+            document.addEventListener("keydown", function(e) {
+                if (e.key === "ArrowLeft") rendition.prev();
+                if (e.key === "ArrowRight") rendition.next();
+            });
+            fetch("<% ebook_url %>")
+                .then(response => response.blob())
+                .then(blob => {
+                    const book = ePub(blob);
+                    rendition = book.renderTo(viewer, {
+                        width: "100%",
+                        height: "100%",
+                        flow: "paginated",
+                        spread: "always"
+                    });
+                    rendition.display();
+                    setupPageInfo(book, rendition);
+                    book.ready.then(() => {
+                        const toc = book.navigation.toc;
+                        const tocContainer = document.createElement("ul");
+                        toc.forEach((chapter) => {
+                            const item = document.createElement("li");
+                            item.textContent = chapter.label;
+                            item.style.cursor = "pointer";
+                            item.onclick = () => rendition.display(chapter.href);
+                            tocContainer.appendChild(item);
+                        });
+                        document.body.appendChild(tocContainer);
+                    });
+                })
+                .catch(err => {
+                    console.error("Error loading EPUB:", err);
+                });
+                function setupPageInfo(book, rendition, elementId = "page-info") {
+                    const info = document.getElementById(elementId);
+                    book.locations.generate().then(() => {
+                        rendition.on("relocated", (location) => {
+                        const spineIndex = book.spine.spineItems.findIndex(item =>
+                            item.href.replace(/#.*/, '') === location.start.href.replace(/#.*/, '')
+                        );
+                        const chapterNum = spineIndex + 1;
+                        const totalChapters = book.spine.spineItems.length;
+                        const percentage = book.locations.percentageFromCfi(location.start.cfi);
+                        const percentText = Math.floor(percentage * 100) + "%";
+                        info.textContent = `Chapter ${chapterNum} of ${totalChapters} — ${percentText}`;
+                    });
+                });
+            }
+        </script>
+    </body>
+</html>

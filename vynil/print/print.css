@@ -1,0 +1,82 @@
+.chapter {
+    break-before: right;
+}
+
+img {
+    width: 100%;
+}
+
+.page-break {
+    break-before: page;
+}
+
+.dinkus {
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+.dinkus::after {
+    content: "⁂";
+}
+
+.admonition {
+    border: 1px solid black;
+    margin: 1em;
+    padding: 1em;
+}
+
+.columns {
+    display: flex;
+}
+.columns .column {
+    flex: 1;
+}
+
+.table {
+    width: 100%;
+}
+
+.table th {
+    border-bottom: 1px solid black;
+    padding: 0.5em;
+    font-weight: bold;
+}
+
+.table td {
+    padding: 0.5em;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f0f0f0;
+}
+
+
+@page:blank {
+    @bottom-left {
+        content: none;
+    }
+    @bottom-right {
+        content: none;
+    }
+}
+
+@page:left {
+    @bottom-left {
+        content: counter(page);
+    }
+    @bottom-right {
+        content: string(chapter-title);
+    }
+}
+
+@page:right {
+    @bottom-right {
+        content: counter(page); 
+    }
+    @bottom-left {
+        content: string(chapter-title);
+    }
+}
+
+.chapter h1 {
+    string-set: chapter-title content(text);
+}

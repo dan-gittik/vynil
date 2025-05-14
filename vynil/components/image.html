@@ -1,0 +1,11 @@
+!if arg:
+    !if ' ' in arg:
+        !image_name, caption = arg.split(' ', 1)
+    !else:
+        !image_name, caption = arg, None
+    !image_url = renderer.image_url(image_name)
+    <figure class="image">
+        <img src="{image_url}" />
+        !if caption:
+            <figcaption>{caption}</figcaption>
+    </figure>

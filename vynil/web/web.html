@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{book.title}</title>
+        !for author in book.authors:
+            <meta name="author" content="{author}" />
+        !for url in renderer.styles:
+            <link rel="stylesheet" href="{url}" />
+        !for url in renderer.scripts:
+            <script src="{url}"></script>
+        <style>
+            %bookmark style
+        </style>
+        <script>
+            %bookmark script
+        </script>
+    </head>
+    <body>
+        <nav>
+            <ul id="toc">
+                %bookmark toc
+            </ul>
+        </nav>
+        %!for n, chapter in enumerate(book.chapters, 1):
+            %eval renderer.set_chapter({chapter.id!r})
+            <section id="{renderer.current_chapter.id}" class="chapter">
+                %include: chapter.text load="chapter" with_namespace=True
+                %append toc
+                    <li>
+                        <a href="#{renderer.current_chapter.id}">{renderer.current_chapter.title}</a>
+                        !if renderer.current_chapter.sections:
+                            <ul class="sections">
+                                !for section_id, section in renderer.current_chapter.sections.items():
+                                    <li><a href="#{section.id}">{section.title}</a></li>
+                            </ul>
+                    </li>
+            </section>
+    </body>
+</html>

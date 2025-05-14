@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{book.title}</title>
+        !for author in book.authors:
+            <meta name="author" content="{author}" />
+        !for url in renderer.styles:
+            <link rel="stylesheet" href="{url}" />
+        !for url in renderer.scripts:
+            <script src="{url}"></script>
+        <style>
+            %bookmark style
+        </style>
+        <script>
+            %bookmark script
+            %raw
+                document.addEventListener("DOMContentLoaded", () => {
+                    window.PagedPolyfill.on("rendered", () => {
+                        window.status = "pagedone";
+                    });
+                });
+        </script>
+    </head>
+    <body>
+        <section class="chapter">
+            <h1>Table of Contents</h1>
+            <table>
+                <tbody>
+                    %bookmark toc
+                </tbody>
+            </table>
+        </section>
+        %!for chapter in book.chapters:
+            %eval renderer.set_chapter({chapter.id!r})
+            <section id="{renderer.current_chapter.id}" class="chapter">
+                %include: chapter.text load="chapter" with_namespace=True
+                %append toc
+                    <tr>
+                        <td>
+                            {renderer.current_chapter.title}
+                        </td>
+                        <td>
+                            {toc.get(renderer.current_chapter.id, 0)}
+                        </td>
+                    </tr>
+            </section>
+    </body>
+</html>

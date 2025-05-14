@@ -8,9 +8,9 @@ import sys
 from typing import Any
 
 ROOT = pathlib.Path(__file__).parent
-PACKAGE = "auryn"
+PACKAGE = "vynil"
 LINE_LENGTH = 120
-COVERAGE_PORT = 5000
+COVERAGE_PORT = 8888
 ARTEFACTS = [
     ".pytest_cache",
     ".coverage",
@@ -31,7 +31,7 @@ def clean() -> None:
 
 def test(args: list[str]) -> None:
     tests = []
-    for arg in sys.argv[1:]:
+    for arg in args:
         tests.extend(["-k", arg])
     _execute("pytest", "tests", "-x", "-vv", "--ff", *tests)
 

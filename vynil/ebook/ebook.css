@@ -1,0 +1,50 @@
+p {
+    color: red;
+}
+
+.chapter {
+    page-break-before: right;
+}
+
+.page-break {
+    page-break-before: always;
+}
+
+.dinkus {
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+.dinkus::after {
+    content: "⁂";
+}
+
+.admonition {
+    border: 1px solid black;
+    margin: 1em;
+    padding: 1em;
+}
+
+.columns {
+    display: flex;
+}
+.columns .column {
+    flex: 1;
+}
+
+.table {
+    width: 100%;
+}
+
+.table th {
+    border-bottom: 1px solid black;
+    padding: 0.5em;
+    font-weight: bold;
+}
+
+.table td {
+    padding: 0.5em;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f0f0f0;
+}
